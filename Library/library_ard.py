@@ -97,6 +97,7 @@ def drag_num(tipoT, numero, repeats):
 		driver.enviar_msj(mensaje2)
 	driver.enviar_msj(mensaje3)
 
+#mapear coordenadas a posiciones de servos
 def mapearCoords(X,Y, tocar):
 	bottom=102-X #X puede ser numero de entre 0 y 42
 	right= 147-Y #Y puede ser numero de entre 0 y 22
@@ -114,6 +115,7 @@ def mapearCoords(X,Y, tocar):
 		right=147
 	return (right, bottom, left)
 
+#mapear numeros a posiciones de los servos
 def coordenadasNumero(tipoT, numero, tocar):
  right=0 #igual a Y (+:arriba cel)
  bottom=0 #igual a X (+:izquierda cel)
@@ -306,7 +308,9 @@ def getInst():
 		lineas[i]=aux[0: len(aux)-1]
 	return lineas
 
-conexion_ard()
-lista=getInst()
-print(lista)
-ejecutarInst(lista)
+if (conexion_ard()==-1):
+	print ("No conectado con arduino")
+else:
+	lista=getInst()
+	print(lista)
+	ejecutarInst(lista)
