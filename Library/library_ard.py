@@ -1,5 +1,6 @@
 import ardDriver as driver
 import time
+import os
 
 def conexion_ard():
 	s= driver.conexion_ard()
@@ -70,7 +71,7 @@ def drag_xy(X,Y, repeats):
 	Y_n= tupla[1] #bottom
 	Z_n= tupla[2] #left
 	mensaje1= formarMensaje(True, X_n, Y_n, Z_n)
-	mensaje2= formarMensaje(True, 125, 65, 70)
+	mensaje2= formarMensaje(True, 125, 65, 66)
 	mensaje3= formarMensaje(False, 137, 80, 80)
 	for i in range(repeats):
 		driver.enviar_msj(mensaje1)
@@ -101,8 +102,11 @@ def mapearCoords(X,Y, tocar):
 	right= 147-Y #Y puede ser numero de entre 0 y 22
 	left=0	
 	if (tocar):
-		left=70
- 	else:
+		if (right>130):
+			left=70
+		else:
+			left=67
+	else:
 		left=80
 	if (bottom<60):
 		bottom=102
@@ -270,22 +274,39 @@ def ejecutarInst(lista):
 	for i in range (len(lista)):
 		inst= lista[i]
 		if (inst=="TOUCHXY"):
-			X= lista[i+1]
-			Y= lista[i+2]
+			X= int(lista[i+1])
+			Y= int(lista[i+2])
+			print ("Ejecutando instruccion: TOUCHXY ", X, Y)
 			touch_xy(X,Y)
 			i=i+2
-		if (inst=="TOUCHN"):
+		elif (inst=="TOUCHN"):
 			tipoT= lista[i+1]
-			numero= lista[i+2]
+			numero= int(lista[i+2])
+			print ("Ejecutando instruccion: TOUCHN ", tipoT, numero)
 			touch_num(tipoT,numero)
 			i=i+2
 		elif (inst=="PUSH"):
-			tiempo= lista[i+1]
+			tiempo= int(lista[i+1])
+			print ("Ejecutando instruccion: PUSH ", tiempo)
 			push_xy(21, 11, tiempo)
 			i=i+1
 		elif (inst=="DRAG"):
-			X= lista[i+1]
-			Y= lista[i+2]
-			repeats= lista[i+3]
+			X= int(lista[i+1])
+			Y= int(lista[i+2])
+			repeats= int(lista[i+3])
+			print ("Ejecutando instruccion: DRAG ", X, Y, repeats)
 			drag_xy(X, Y, repeats)
 			i=i+3
+
+def getInst():
+	f = open("../Library/instrucciones.txt")
+	lineas = f.readlines()
+	for i in range (len (lineas)):
+		aux= lineas[i]
+		lineas[i]=aux[0: len(aux)-1]
+	return lineas
+
+conexion_ard()
+lista=getInst()
+print(lista)
+ejecutarInst(lista)

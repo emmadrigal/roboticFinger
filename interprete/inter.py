@@ -4,6 +4,7 @@ from interpreterLexer import interpreterLexer
 from interpreterParser import interpreterParser
 from interpreterListener import interpreterListener
 from antlr4.error.ErrorListener import ErrorListener
+import os
 
 
 def main(argv):
@@ -40,6 +41,14 @@ def send(indata):
 		data = data.split(" ")
 		out=out+data
 	print(out)
+	archivo = open('../Library/instrucciones.txt', 'w')
+	for item in out:
+  		archivo.write("%s\n" % item)
+	archivo.close()
+	cwd = os.getcwd()
+	command= "sudo python "+cwd+"/../Library/library_ard.py"
+	print(command)
+	os.system(command)
 
 if __name__ == '__main__':
     main(sys.argv)
