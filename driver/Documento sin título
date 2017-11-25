@@ -1,0 +1,1 @@
+ gcc -shared -fPIC driver_ard.c -o ardDriver.so -I/usr/include/python2.7 -lpython2.7
